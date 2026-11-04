@@ -1,0 +1,530 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Ayo Menulis Angka</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<style>
+/* Tata letak: satu kolom ala buku tulis kelas 1. Kartu bergaya stiker (garis tebal, bayangan keras),
+   kanvas menulis dengan garis buku bertiga, dan bingkai sepuluh untuk menghitung apel. */
+:root {
+  --bg: #E8F4FF;
+  --card: #FFFFFF;
+  --ink: #1B2A4E;
+  --muted: #4A5D86;
+  --edge: #1B2A4E;
+  --sun: #FFC933;
+  --orange: #FF8A3D;
+  --sky: #2F9BFF;
+  --leaf: #2FB864;
+  --apple: #EF4B3A;
+  --guide: #CFE6FF;
+  --pen: #FF6B1A;
+  --line: #9CC4EA;
+  --ok-bg: #D9F6E3;
+  --warn-bg: #FFE8D4;
+  --on-accent: #10203F;
+  --font-display: 'Baloo 2', 'Arial Rounded MT Bold', 'Trebuchet MS', system-ui, sans-serif;
+  --font-body: 'Nunito', 'Trebuchet MS', system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1B33; --card: #1A2C50; --ink: #F4F7FF; --muted: #AEBDDF; --edge: #060D1C;
+    --sun: #FFD04D; --orange: #FF9A55; --sky: #58B0FF; --leaf: #4BD283; --apple: #FF6A57;
+    --guide: #35507F; --pen: #FFB347; --line: #4A6AA0; --ok-bg: #1B4A35; --warn-bg: #4A3322;
+    --on-accent: #10203F;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1B33; --card: #1A2C50; --ink: #F4F7FF; --muted: #AEBDDF; --edge: #060D1C;
+  --sun: #FFD04D; --orange: #FF9A55; --sky: #58B0FF; --leaf: #4BD283; --apple: #FF6A57;
+  --guide: #35507F; --pen: #FFB347; --line: #4A6AA0; --ok-bg: #1B4A35; --warn-bg: #4A3322;
+  --on-accent: #10203F;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.5;
+  padding-block: 20px 32px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+h1, h2, p { margin: 0; }
+
+/* Kepala halaman */
+.top { display: flex; align-items: center; gap: 14px; }
+.mascot { width: 72px; height: 72px; flex: none; }
+.top h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.9rem, 6vw, 2.6rem); line-height: 1.05; text-wrap: balance; }
+.top p { color: var(--muted); font-weight: 600; }
+
+/* Tab */
+.tabs { display: flex; gap: 10px; }
+.tab {
+  flex: 1; min-height: 52px; cursor: pointer;
+  font: 800 1.1rem var(--font-body); color: var(--ink);
+  background: var(--card); border: 3px solid var(--edge); border-radius: 18px;
+  box-shadow: 0 4px 0 var(--edge);
+}
+.tab[aria-selected="true"] { background: var(--sky); color: var(--on-accent); }
+
+/* Kartu */
+.card {
+  background: var(--card); border: 3px solid var(--edge); border-radius: 22px;
+  box-shadow: 5px 5px 0 var(--edge); padding: 18px;
+}
+.label { font-weight: 800; font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+/* Pilih angka */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(54px, 1fr)); gap: 10px; }
+.tile {
+  position: relative; min-height: 56px; cursor: pointer;
+  font: 800 1.7rem var(--font-display); color: var(--ink);
+  background: var(--card); border: 3px solid var(--edge); border-radius: 16px;
+  box-shadow: 0 4px 0 var(--edge);
+}
+.tile[aria-current="true"] { background: var(--sun); color: var(--on-accent); }
+.tile.done::after { content: "\2605"; position: absolute; top: -2px; right: 4px; font-size: .9rem; color: var(--orange); }
+.progress { display: flex; align-items: center; gap: 12px; font-weight: 700; color: var(--muted); }
+.bar { flex: 1; height: 14px; border: 3px solid var(--edge); border-radius: 999px; background: var(--card); overflow: hidden; }
+.bar > i { display: block; height: 100%; width: 0; background: var(--leaf); transition: width .4s; }
+
+/* Panggung belajar */
+.stage { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 20px; align-items: start; }
+.info { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+.bignum { font: 800 8rem/1 var(--font-display); color: var(--orange); }
+.word { font: 800 2.2rem/1.1 var(--font-display); }
+.count { font-weight: 700; color: var(--muted); }
+.frame { width: 100%; max-width: 320px; height: auto; display: block; margin-block: 6px; }
+.cell { fill: var(--bg); stroke: var(--line); stroke-width: 2; }
+
+.write { display: flex; flex-direction: column; gap: 12px; }
+.seg { display: flex; gap: 8px; }
+.seg button {
+  flex: 1; min-height: 46px; cursor: pointer; font: 800 1rem var(--font-body); color: var(--ink);
+  background: var(--card); border: 3px solid var(--edge); border-radius: 999px;
+}
+.seg button[aria-pressed="true"] { background: var(--leaf); color: var(--on-accent); }
+.howto { color: var(--muted); font-weight: 600; font-size: 1rem; }
+.pad {
+  position: relative; width: 100%; max-width: 100%; aspect-ratio: 1 / 1;
+  border: 3px solid var(--edge); border-radius: 18px; background: var(--card); overflow: hidden;
+}
+.pad canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+#ink { touch-action: none; cursor: crosshair; }
+.fb { min-height: 3.2em; padding: 8px 14px; border-radius: 14px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+.fb:empty { padding: 0; }
+.fb.ok { background: var(--ok-bg); }
+.fb.hint { background: var(--warn-bg); }
+.fb .star { font-size: 1.8rem; color: var(--orange); }
+.fb.ok .star { animation: pop .6s ease-out; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; }
+.row .btn { flex: 1 1 140px; }
+
+.btn {
+  min-height: 52px; padding: 8px 18px; cursor: pointer;
+  font: 800 1.05rem var(--font-body); color: var(--on-accent);
+  background: var(--sun); border: 3px solid var(--edge); border-radius: 999px;
+  box-shadow: 0 4px 0 var(--edge); transition: transform .08s, box-shadow .08s;
+}
+.btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 var(--edge); }
+.btn.blue { background: var(--sky); }
+.btn.green { background: var(--leaf); }
+.btn.plain { background: var(--card); color: var(--ink); }
+.btn:disabled, .tile:disabled { opacity: .45; cursor: not-allowed; }
+
+:is(button, canvas):focus-visible { outline: 4px solid var(--orange); outline-offset: 3px; }
+
+/* Latihan */
+.quiz { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+.quiz h2 { font: 800 1.9rem/1.15 var(--font-display); text-wrap: balance; }
+.opts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; max-width: 460px; }
+.opt {
+  min-height: 92px; cursor: pointer; font: 800 3.4rem/1 var(--font-display); color: var(--ink);
+  background: var(--card); border: 3px solid var(--edge); border-radius: 20px; box-shadow: 0 5px 0 var(--edge);
+}
+.opt.right { background: var(--leaf); color: var(--on-accent); }
+.opt.wrong { background: var(--warn-bg); opacity: .6; }
+.quiz .fb { width: 100%; max-width: 460px; justify-content: center; }
+.result .bignum { font-size: 6rem; color: var(--leaf); }
+.stars { font-size: 2.6rem; letter-spacing: .1em; color: var(--orange); }
+
+.foot { color: var(--muted); font-size: .95rem; font-weight: 600; text-align: center; }
+
+@keyframes pop { 0% { transform: scale(.3) rotate(-30deg); } 60% { transform: scale(1.5) rotate(10deg); } 100% { transform: scale(1) rotate(0); } }
+@media (prefers-reduced-motion: reduce) { .fb.ok .star { animation: none; } .bar > i, .btn { transition: none; } }
+@media (max-width: 420px) { .bignum { font-size: 6rem; } .opt { font-size: 2.8rem; } .mascot { width: 56px; height: 56px; } }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="apel" viewBox="0 0 48 48">
+    <path d="M24 15c-4-5-16-4-16 10 0 10 7 18 12 18 2 0 3-1 4-1s2 1 4 1c5 0 12-8 12-18 0-14-12-15-16-10z" fill="var(--apple)" stroke="var(--edge)" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M24 15c0-5 3-9 9-10-1 6-4 9-9 10z" fill="var(--leaf)" stroke="var(--edge)" stroke-width="2.5" stroke-linejoin="round"/>
+    <ellipse cx="14" cy="26" rx="2.6" ry="5" fill="#fff" opacity=".5"/>
+  </symbol>
+</svg>
+
+<main class="wrap">
+  <header class="top">
+    <svg class="mascot" viewBox="0 0 80 80" role="img" aria-label="Pensil yang tersenyum">
+      <rect x="28" y="4" width="24" height="9" rx="3" fill="#FF8FA3" stroke="var(--edge)" stroke-width="2.5"/>
+      <rect x="28" y="13" width="24" height="6" fill="#C5D0E6" stroke="var(--edge)" stroke-width="2.5"/>
+      <rect x="28" y="19" width="24" height="38" fill="var(--sun)" stroke="var(--edge)" stroke-width="2.5"/>
+      <path d="M28 57h24L40 76z" fill="#F7D9B2" stroke="var(--edge)" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M36.5 68h7L40 76z" fill="var(--edge)"/>
+      <circle cx="34" cy="33" r="2.6" fill="var(--edge)"/>
+      <circle cx="46" cy="33" r="2.6" fill="var(--edge)"/>
+      <circle cx="31" cy="40" r="3" fill="var(--orange)" opacity=".55"/>
+      <circle cx="49" cy="40" r="3" fill="var(--orange)" opacity=".55"/>
+      <path d="M35 41q5 5 10 0" fill="none" stroke="var(--edge)" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+    <div>
+      <h1>Ayo Menulis Angka</h1>
+      <p>Belajar menulis bilangan 0 sampai 10</p>
+    </div>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="Pilih kegiatan">
+    <button class="tab" role="tab" id="tabLearn" aria-selected="true" aria-controls="panelLearn">Belajar menulis</button>
+    <button class="tab" role="tab" id="tabQuiz" aria-selected="false" aria-controls="panelQuiz">Latihan menghitung</button>
+  </div>
+
+  <section id="panelLearn" role="tabpanel" aria-labelledby="tabLearn" style="display:flex;flex-direction:column;gap:20px">
+    <div class="card" style="display:flex;flex-direction:column;gap:14px">
+      <p class="label">Pilih angka</p>
+      <div class="tiles" id="tiles"></div>
+      <div class="progress"><span id="progTxt"></span><div class="bar"><i id="progBar"></i></div></div>
+    </div>
+
+    <div class="stage">
+      <div class="card info">
+        <p class="label">Bilangan</p>
+        <div class="bignum" id="bigNum" aria-hidden="true">1</div>
+        <p class="word" id="word">satu</p>
+        <div id="frameBox"></div>
+        <p class="count" id="countTxt"></p>
+        <button class="btn blue" id="speakBtn" type="button">Dengarkan</button>
+      </div>
+
+      <div class="card write">
+        <div class="seg" role="group" aria-label="Cara menulis">
+          <button type="button" id="mFollow" aria-pressed="true">Ikuti garis</button>
+          <button type="button" id="mFree" aria-pressed="false">Tulis sendiri</button>
+        </div>
+        <p class="howto" id="howto"></p>
+        <div class="pad">
+          <canvas id="guide" width="800" height="800" aria-hidden="true"></canvas>
+          <canvas id="ink" width="800" height="800" tabindex="0" aria-label="Kotak menulis angka. Gunakan jari atau mouse."></canvas>
+        </div>
+        <div class="fb" id="fb" role="status" aria-live="polite"></div>
+        <div class="row">
+          <button class="btn plain" id="clearBtn" type="button">Hapus</button>
+          <button class="btn green" id="checkBtn" type="button">Periksa</button>
+        </div>
+        <div class="row">
+          <button class="btn plain" id="prevBtn" type="button">Angka sebelumnya</button>
+          <button class="btn" id="nextBtn" type="button">Angka berikutnya</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="panelQuiz" role="tabpanel" aria-labelledby="tabQuiz" hidden>
+    <div class="card quiz" id="quizBox"></div>
+  </section>
+
+  <p class="foot">Matematika kelas 1. Tujuan belajar: murid dapat menulis bilangan sampai 10.</p>
+</main>
+
+<script>
+(function () {
+  var WORDS = ['nol', 'satu', 'dua', 'tiga', 'empat', 'lima', 'enam', 'tujuh', 'delapan', 'sembilan', 'sepuluh'];
+  var S = 2, LOGICAL = 400, BASE = 320, TOP = 110, MID = 215;
+  var KEY = 'ayo-menulis-angka';
+
+  function $(s) { return document.querySelector(s); }
+  function tok(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function rand(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+  function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = rand(0, i); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+
+  var cur = 1, mode = 'follow', drawing = false, last = null, hasInk = false, autoTimer = null, revealed = false;
+  var done = {};
+  try {
+    var saved = JSON.parse(localStorage.getItem(KEY) || '[]');
+    saved.forEach(function (n) { if (n >= 0 && n <= 10) done[n] = true; });
+  } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(Object.keys(done))); } catch (e) {} }
+  function doneCount() { return Object.keys(done).length; }
+
+  /* Bingkai sepuluh */
+  function frameSVG(n) {
+    var s = '<svg class="frame" viewBox="0 0 250 104" role="img" aria-label="Bingkai sepuluh berisi ' + n + ' apel">';
+    for (var i = 0; i < 10; i++) {
+      var x = (i % 5) * 50, y = Math.floor(i / 5) * 50;
+      s += '<rect class="cell" x="' + (x + 2) + '" y="' + (y + 2) + '" width="46" height="46" rx="8"/>';
+      if (i < n) s += '<use href="#apel" x="' + (x + 2) + '" y="' + (y + 2) + '" width="46" height="46"/>';
+    }
+    return s + '</svg>';
+  }
+
+  /* Kanvas */
+  var ink = $('#ink'), guide = $('#guide');
+  var ictx = ink.getContext('2d'), gctx = guide.getContext('2d');
+  ictx.scale(S, S); gctx.scale(S, S);
+
+  function fontSpec(size) { return '800 ' + size + 'px "Baloo 2", "Arial Rounded MT Bold", "Trebuchet MS", sans-serif'; }
+  function metrics(g, n) {
+    var t = String(n);
+    g.font = fontSpec(100);
+    var asc = g.measureText('8').actualBoundingBoxAscent || 70;
+    var size = 100 * (BASE - TOP) / asc;
+    g.font = fontSpec(size);
+    var w = g.measureText(t).width;
+    if (w > 340) { size = size * 340 / w; }
+    return { t: t, size: size };
+  }
+  function drawLines() {
+    gctx.clearRect(0, 0, LOGICAL, LOGICAL);
+    gctx.save();
+    gctx.lineWidth = 2; gctx.strokeStyle = tok('--line');
+    [[TOP, []], [MID, [8, 8]], [BASE, []]].forEach(function (l) {
+      gctx.setLineDash(l[1]); gctx.beginPath(); gctx.moveTo(16, l[0]); gctx.lineTo(384, l[0]); gctx.stroke();
+    });
+    gctx.restore();
+  }
+  function drawGlyph() {
+    var p = metrics(gctx, cur);
+    gctx.save();
+    gctx.font = fontSpec(p.size); gctx.textAlign = 'center'; gctx.textBaseline = 'alphabetic';
+    gctx.fillStyle = tok('--guide'); gctx.fillText(p.t, 200, BASE);
+    gctx.setLineDash([10, 9]); gctx.lineWidth = 3; gctx.lineJoin = 'round'; gctx.strokeStyle = tok('--sky');
+    gctx.strokeText(p.t, 200, BASE);
+    gctx.restore();
+  }
+  function renderGuide() {
+    drawLines();
+    if (mode === 'follow' || revealed) drawGlyph();
+  }
+  function clearInk() {
+    ictx.clearRect(0, 0, LOGICAL, LOGICAL);
+    hasInk = false;
+  }
+
+  function pt(e) {
+    var r = ink.getBoundingClientRect();
+    return { x: (e.clientX - r.left) * LOGICAL / r.width, y: (e.clientY - r.top) * LOGICAL / r.height };
+  }
+  function stroke(a, b) {
+    ictx.strokeStyle = tok('--pen'); ictx.fillStyle = tok('--pen');
+    ictx.lineWidth = 36; ictx.lineCap = 'round'; ictx.lineJoin = 'round';
+    ictx.beginPath(); ictx.moveTo(a.x, a.y); ictx.lineTo(b.x, b.y); ictx.stroke();
+  }
+  ink.addEventListener('pointerdown', function (e) {
+    e.preventDefault();
+    try { ink.setPointerCapture(e.pointerId); } catch (x) {}
+    clearTimeout(autoTimer);
+    drawing = true; last = pt(e); hasInk = true;
+    stroke(last, last);
+  });
+  ink.addEventListener('pointermove', function (e) {
+    if (!drawing) return;
+    var p = pt(e); stroke(last, p); last = p;
+  });
+  function endStroke() {
+    if (!drawing) return;
+    drawing = false;
+    if (mode === 'follow' && hasInk) {
+      autoTimer = setTimeout(function () { runCheck(true); }, 900);
+    }
+  }
+  ink.addEventListener('pointerup', endStroke);
+  ink.addEventListener('pointercancel', endStroke);
+
+  /* Pemeriksaan: seberapa banyak angka tertutup coretan, dan seberapa banyak coretan keluar dari angka */
+  function mask(tolerant) {
+    var c = document.createElement('canvas');
+    c.width = c.height = LOGICAL * S;
+    var g = c.getContext('2d');
+    g.scale(S, S);
+    var p = metrics(g, cur);
+    g.font = fontSpec(p.size); g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+    g.fillStyle = '#000'; g.fillText(p.t, 200, BASE);
+    if (tolerant) { g.lineJoin = 'round'; g.lineWidth = 46; g.strokeStyle = '#000'; g.strokeText(p.t, 200, BASE); }
+    return g.getImageData(0, 0, LOGICAL * S, LOGICAL * S).data;
+  }
+  function evaluate() {
+    var core = mask(false), tol = mask(true);
+    var d = ictx.getImageData(0, 0, LOGICAL * S, LOGICAL * S).data;
+    var coreN = 0, cov = 0, inkN = 0, out = 0;
+    for (var i = 3; i < d.length; i += 16) {
+      var a = d[i] > 80;
+      if (core[i] > 128) { coreN++; if (a) cov++; }
+      if (a) { inkN++; if (tol[i] <= 80) out++; }
+    }
+    return { cov: coreN ? cov / coreN : 0, out: inkN ? out / inkN : 1, inkN: inkN };
+  }
+
+  var fb = $('#fb');
+  function say(kind, text, star) {
+    fb.className = 'fb ' + kind;
+    fb.innerHTML = (star ? '<span class="star" aria-hidden="true">★</span>' : '') + '<span></span>';
+    fb.lastChild.textContent = text;
+  }
+  function clearFb() { fb.className = 'fb'; fb.textContent = ''; }
+
+  function runCheck(auto) {
+    if (!hasInk) { if (!auto) say('hint', 'Tulis dulu angkanya di kotak, ya.'); return; }
+    if (mode === 'free' && !revealed) { revealed = true; renderGuide(); }
+    var r = evaluate();
+    if (r.cov >= 0.45 && r.out <= 0.3) {
+      if (!done[cur]) { done[cur] = true; save(); }
+      renderTiles();
+      say('ok', 'Hebat! Kamu sudah bisa menulis angka ' + cur + '.', true);
+    } else if (!auto) {
+      if (r.cov < 0.45) say('hint', 'Angkanya belum lengkap. Ikuti garis putus-putus sampai selesai.');
+      else say('hint', 'Coba lagi pelan-pelan. Tulis di dalam bentuk angka ' + cur + '.');
+    }
+  }
+
+  /* Tampilan */
+  function renderTiles() {
+    var box = $('#tiles');
+    var html = '';
+    for (var n = 0; n <= 10; n++) {
+      html += '<button type="button" class="tile' + (done[n] ? ' done' : '') + '" data-n="' + n + '"' +
+        (n === cur ? ' aria-current="true"' : '') + ' aria-label="Angka ' + n + (done[n] ? ', sudah ditulis' : '') + '">' + n + '</button>';
+    }
+    box.innerHTML = html;
+    var c = doneCount();
+    $('#progTxt').textContent = c + ' dari 11 angka sudah ditulis';
+    $('#progBar').style.width = (c / 11 * 100) + '%';
+  }
+  function renderInfo() {
+    $('#bigNum').textContent = cur;
+    $('#word').textContent = WORDS[cur];
+    $('#frameBox').innerHTML = frameSVG(cur);
+    $('#countTxt').textContent = cur === 0 ? 'Tidak ada apel di bingkai.' : 'Ada ' + cur + ' apel di bingkai.';
+    $('#prevBtn').disabled = cur === 0;
+    $('#nextBtn').disabled = cur === 10;
+  }
+  function renderHowto() {
+    $('#howto').textContent = mode === 'follow'
+      ? 'Tulis angka ' + cur + ' mengikuti garis putus-putus dengan jari atau mouse.'
+      : 'Tulis angka ' + cur + ' sendiri di antara garis buku, lalu tekan Periksa.';
+    $('#mFollow').setAttribute('aria-pressed', mode === 'follow');
+    $('#mFree').setAttribute('aria-pressed', mode === 'free');
+  }
+  function go(n) {
+    cur = Math.max(0, Math.min(10, n));
+    clearTimeout(autoTimer);
+    revealed = false;
+    clearInk(); clearFb();
+    renderTiles(); renderInfo(); renderHowto(); renderGuide();
+  }
+  function setMode(m) { mode = m; go(cur); }
+
+  $('#tiles').addEventListener('click', function (e) {
+    var b = e.target.closest('.tile'); if (b) go(+b.getAttribute('data-n'));
+  });
+  $('#prevBtn').addEventListener('click', function () { go(cur - 1); });
+  $('#nextBtn').addEventListener('click', function () { go(cur + 1); });
+  $('#clearBtn').addEventListener('click', function () { clearTimeout(autoTimer); clearInk(); clearFb(); });
+  $('#checkBtn').addEventListener('click', function () { clearTimeout(autoTimer); runCheck(false); });
+  $('#mFollow').addEventListener('click', function () { setMode('follow'); });
+  $('#mFree').addEventListener('click', function () { setMode('free'); });
+
+  function speak(t) {
+    try {
+      var u = new SpeechSynthesisUtterance(t); u.lang = 'id-ID'; u.rate = 0.8;
+      window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+  if (!('speechSynthesis' in window)) { $('#speakBtn').hidden = true; }
+  $('#speakBtn').addEventListener('click', function () { speak(WORDS[cur]); });
+
+  /* Tab */
+  function showTab(which) {
+    var learn = which === 'learn';
+    $('#panelLearn').hidden = !learn; $('#panelQuiz').hidden = learn;
+    $('#tabLearn').setAttribute('aria-selected', learn); $('#tabQuiz').setAttribute('aria-selected', !learn);
+    if (learn) renderGuide(); else if (!q) newRound();
+  }
+  $('#tabLearn').addEventListener('click', function () { showTab('learn'); });
+  $('#tabQuiz').addEventListener('click', function () { showTab('quiz'); });
+
+  /* Latihan menghitung: 5 soal per putaran */
+  var q = null, qi = 0, score = 0, answered = false, firstTry = true, prevN = -1;
+  function newRound() { qi = 0; score = 0; nextQ(); }
+  function nextQ() {
+    var n; do { n = rand(0, 10); } while (n === prevN);
+    prevN = n;
+    var set = {}; set[n] = true; var arr = [n];
+    while (arr.length < 3) { var v = rand(0, 10); if (!set[v]) { set[v] = true; arr.push(v); } }
+    q = { n: n, opts: shuffle(arr) };
+    answered = false; firstTry = true;
+    renderQ();
+  }
+  function renderQ() {
+    var box = $('#quizBox');
+    var html = '<p class="label">Soal ' + (qi + 1) + ' dari 5</p>' +
+      '<h2>Ada berapa apel di bingkai?</h2>' + frameSVG(q.n) + '<div class="opts">';
+    q.opts.forEach(function (v) { html += '<button type="button" class="opt" data-v="' + v + '" aria-label="Angka ' + v + '">' + v + '</button>'; });
+    html += '</div><div class="fb" id="qfb" role="status" aria-live="polite"></div>' +
+      '<button type="button" class="btn" id="qnext" hidden>' + (qi === 4 ? 'Lihat hasil' : 'Soal berikutnya') + '</button>';
+    box.className = 'card quiz';
+    box.innerHTML = html;
+  }
+  function renderResult() {
+    var box = $('#quizBox');
+    var stars = '';
+    for (var i = 0; i < 5; i++) stars += i < score ? '★' : '☆';
+    var msg = score === 5 ? 'Sempurna! Semua jawabanmu benar.' : score >= 3 ? 'Bagus sekali! Terus berlatih ya.' : 'Ayo coba lagi. Hitung apelnya satu per satu.';
+    box.className = 'card quiz result';
+    box.innerHTML = '<p class="label">Hasil latihan</p><div class="bignum">' + score + '</div>' +
+      '<h2>Benar ' + score + ' dari 5 soal</h2><div class="stars" aria-hidden="true">' + stars + '</div>' +
+      '<p class="count">' + msg + '</p><button type="button" class="btn" id="again">Main lagi</button>';
+  }
+  $('#quizBox').addEventListener('click', function (e) {
+    var o = e.target.closest('.opt');
+    if (o && !answered) {
+      var v = +o.getAttribute('data-v');
+      var qfb = $('#qfb');
+      if (v === q.n) {
+        answered = true;
+        if (firstTry) score++;
+        o.classList.add('right');
+        qfb.className = 'fb ok';
+        qfb.innerHTML = '<span class="star" aria-hidden="true">★</span><span></span>';
+        qfb.lastChild.textContent = 'Benar! Ada ' + q.n + ' apel (' + WORDS[q.n] + ').';
+        $('#qnext').hidden = false;
+      } else {
+        firstTry = false;
+        o.classList.add('wrong'); o.disabled = true;
+        qfb.className = 'fb hint';
+        qfb.textContent = 'Belum tepat. Hitung apelnya sekali lagi.';
+      }
+      return;
+    }
+    if (e.target.id === 'qnext') { qi++; if (qi >= 5) renderResult(); else nextQ(); }
+    if (e.target.id === 'again') { newRound(); }
+  });
+
+  /* Mulai */
+  try {
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    (mq.addEventListener ? mq.addEventListener.bind(mq, 'change') : mq.addListener.bind(mq))(function () { renderGuide(); });
+  } catch (e) {}
+  go(1);
+  if (document.fonts && document.fonts.load) {
+    document.fonts.load('800 100px "Baloo 2"').then(function () { if (!$('#panelLearn').hidden) renderGuide(); }).catch(function () {});
+  }
+})();
+</script>
+
+</body></html>
