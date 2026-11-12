@@ -1,0 +1,396 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Aku Anak Pancasila</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<style>
+/* Tata letak: satu kolom bergaya buku cerita. Tiga kegiatan dalam tab: kenali lima sila,
+   pilih perbuatan yang benar, dan kartu kebiasaan baik hari ini. Setiap sila punya warna sendiri. */
+:root {
+  --bg: #FFF4E0;
+  --card: #FFFFFF;
+  --ink: #2B2140;
+  --muted: #5F5575;
+  --edge: #2B2140;
+  --red: #E63B3B;
+  --on-accent: #2B2140;
+  --c1: #FFC933;
+  --c2: #FF7B6B;
+  --c3: #5FD08A;
+  --c4: #5DB4FF;
+  --c5: #FFA24D;
+  --ok-bg: #D9F6E3;
+  --warn-bg: #FFE3D6;
+  --font-display: 'Fredoka', 'Arial Rounded MT Bold', 'Trebuchet MS', system-ui, sans-serif;
+  --font-body: 'Nunito', 'Trebuchet MS', system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1E1633; --card: #2E2350; --ink: #F7F2FF; --muted: #C3B8E0; --edge: #0D0820; --red: #FF6A5E;
+    --ok-bg: #1D4A36; --warn-bg: #4F2F2A;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1E1633; --card: #2E2350; --ink: #F7F2FF; --muted: #C3B8E0; --edge: #0D0820; --red: #FF6A5E;
+  --ok-bg: #1D4A36; --warn-bg: #4F2F2A;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 18px; line-height: 1.5;
+  padding-block: 20px 32px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+h1, h2, h3, p { margin: 0; }
+
+.top { display: flex; align-items: center; gap: 14px; }
+.mascot { width: 76px; height: 76px; flex: none; }
+.top h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.9rem, 6vw, 2.7rem); line-height: 1.05; text-wrap: balance; }
+.top p { color: var(--muted); font-weight: 600; }
+.flagline { height: 10px; border: 3px solid var(--edge); border-radius: 999px; background: linear-gradient(90deg, var(--red) 50%, #FFFFFF 50%); }
+
+.tabs { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.tab {
+  min-height: 52px; padding: 6px 10px; cursor: pointer;
+  font: 800 1.05rem var(--font-body); color: var(--ink);
+  background: var(--card); border: 3px solid var(--edge); border-radius: 18px; box-shadow: 0 4px 0 var(--edge);
+}
+.tab[aria-selected="true"] { background: var(--red); color: #fff; }
+:root[data-theme="dark"] .tab[aria-selected="true"] { color: #1E1633; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tab[aria-selected="true"] { color: #1E1633; } }
+
+.card { background: var(--card); border: 3px solid var(--edge); border-radius: 22px; box-shadow: 5px 5px 0 var(--edge); padding: 18px; }
+.label { font-weight: 800; font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.lead { font-weight: 700; color: var(--muted); }
+
+/* Kenali sila */
+.silas { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 16px; align-items: start; }
+.sila { background: var(--card); border: 3px solid var(--edge); border-radius: 22px; box-shadow: 5px 5px 0 var(--edge); overflow: hidden; min-width: 0; }
+.sila-head {
+  width: 100%; display: flex; align-items: center; gap: 12px; text-align: left; cursor: pointer;
+  padding: 14px; background: var(--c); color: var(--on-accent); border: 0; font: inherit;
+}
+.badge { flex: none; width: 46px; height: 46px; display: grid; place-items: center; border-radius: 50%; background: var(--card); color: var(--ink); border: 3px solid var(--edge); font: 700 1.5rem var(--font-display); }
+.sila-icon { flex: none; width: 48px; height: 48px; }
+.sila-title { min-width: 0; display: flex; flex-direction: column; }
+.sila-title b { font: 700 1.15rem/1.2 var(--font-display); overflow-wrap: anywhere; }
+.sila-title span { font-weight: 800; font-size: .95rem; }
+.chev { margin-left: auto; flex: none; font-size: 1.3rem; transition: transform .2s; }
+.sila-head[aria-expanded="true"] .chev { transform: rotate(180deg); }
+.sila-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 10px; }
+.sila-body h3 { font: 700 1rem var(--font-body); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.sila-body ul { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 4px; font-weight: 700; }
+.listen { align-self: flex-start; }
+
+.btn {
+  min-height: 50px; padding: 8px 18px; cursor: pointer;
+  font: 800 1.05rem var(--font-body); color: var(--on-accent);
+  background: var(--c1); border: 3px solid var(--edge); border-radius: 999px; box-shadow: 0 4px 0 var(--edge);
+  transition: transform .08s, box-shadow .08s;
+}
+.btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 var(--edge); }
+.btn.green { background: var(--c3); }
+.btn.blue { background: var(--c4); }
+.btn.plain { background: var(--card); color: var(--ink); }
+:is(button):focus-visible { outline: 4px solid var(--red); outline-offset: 3px; }
+
+/* Pilih yang benar */
+.quiz { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+.quiz .scene { width: 84px; height: 84px; }
+.quiz h2 { font: 700 1.7rem/1.2 var(--font-display); text-wrap: balance; max-width: 30ch; }
+.quiz .ask { font-weight: 800; color: var(--muted); }
+.choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 14px; width: 100%; max-width: 640px; }
+.choice {
+  min-height: 92px; padding: 12px 14px; cursor: pointer; font: 800 1.15rem/1.3 var(--font-body); color: var(--ink);
+  background: var(--card); border: 3px solid var(--edge); border-radius: 20px; box-shadow: 0 5px 0 var(--edge);
+}
+.choice.right { background: var(--c3); color: var(--on-accent); }
+.choice.wrong { background: var(--warn-bg); opacity: .65; }
+.choice:disabled { cursor: default; }
+.fb { width: 100%; max-width: 640px; padding: 10px 14px; border-radius: 14px; font-weight: 800; text-align: left; display: flex; gap: 10px; align-items: flex-start; }
+.fb:empty { display: none; }
+.fb.ok { background: var(--ok-bg); }
+.fb.hint { background: var(--warn-bg); }
+.fb .star { font-size: 1.7rem; line-height: 1; color: var(--c5); }
+.fb.ok .star { animation: pop .6s ease-out; }
+.result .big { font: 700 6rem/1 var(--font-display); color: var(--red); }
+.stars { font-size: 2.6rem; letter-spacing: .1em; color: var(--c5); }
+.dots { display: flex; gap: 8px; }
+.dots i { width: 14px; height: 14px; border-radius: 50%; border: 3px solid var(--edge); background: var(--card); }
+.dots i.now { background: var(--c1); }
+.dots i.hit { background: var(--c3); }
+
+/* Kartu kebiasaan */
+.habits { display: flex; flex-direction: column; gap: 12px; }
+.habit {
+  display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; cursor: pointer;
+  padding: 12px 14px; font: 800 1.1rem/1.3 var(--font-body); color: var(--ink);
+  background: var(--card); border: 3px solid var(--edge); border-radius: 18px; box-shadow: 0 4px 0 var(--edge);
+}
+.habit .tick { flex: none; width: 40px; height: 40px; display: grid; place-items: center; border: 3px solid var(--edge); border-radius: 12px; background: var(--card); font-size: 1.5rem; color: transparent; }
+.habit[aria-pressed="true"] { background: var(--ok-bg); }
+.habit[aria-pressed="true"] .tick { background: var(--c3); color: var(--on-accent); }
+.habit .dotc { flex: none; width: 16px; height: 16px; border-radius: 50%; background: var(--c); border: 3px solid var(--edge); }
+.habit .txt { min-width: 0; }
+.habit small { display: block; font-weight: 700; color: var(--muted); font-size: .85rem; }
+.hprog { display: flex; align-items: center; gap: 12px; font-weight: 800; }
+.bar { flex: 1; height: 16px; border: 3px solid var(--edge); border-radius: 999px; background: var(--card); overflow: hidden; }
+.bar > i { display: block; height: 100%; width: 0; background: var(--c3); transition: width .4s; }
+
+.foot { color: var(--muted); font-size: .95rem; font-weight: 600; text-align: center; }
+
+@keyframes pop { 0% { transform: scale(.3) rotate(-30deg); } 60% { transform: scale(1.5) rotate(10deg); } 100% { transform: scale(1) rotate(0); } }
+@media (prefers-reduced-motion: reduce) { .fb.ok .star { animation: none; } .bar > i, .btn, .chev { transition: none; } }
+@media (max-width: 420px) { .mascot { width: 58px; height: 58px; } .quiz h2 { font-size: 1.45rem; } }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i1" viewBox="0 0 48 48"><path d="M24 4l5.6 12.2 13.2 1.5-9.8 9 2.7 13.1L24 33l-11.7 6.8 2.7-13.1-9.8-9 13.2-1.5z" fill="#fff" stroke="#2B2140" stroke-width="3" stroke-linejoin="round"/></symbol>
+  <symbol id="i2" viewBox="0 0 48 48"><path d="M24 41C8 30 5 21 5 15a10 10 0 0 1 19-4 10 10 0 0 1 19 4c0 6-3 15-19 26z" fill="#fff" stroke="#2B2140" stroke-width="3" stroke-linejoin="round"/></symbol>
+  <symbol id="i3" viewBox="0 0 48 48"><rect x="21" y="26" width="6" height="16" rx="2" fill="#fff" stroke="#2B2140" stroke-width="3"/><circle cx="16" cy="22" r="9" fill="#fff" stroke="#2B2140" stroke-width="3"/><circle cx="32" cy="22" r="9" fill="#fff" stroke="#2B2140" stroke-width="3"/><circle cx="24" cy="13" r="9" fill="#fff" stroke="#2B2140" stroke-width="3"/><circle cx="16" cy="22" r="6" fill="#fff"/><circle cx="32" cy="22" r="6" fill="#fff"/><circle cx="24" cy="14" r="6" fill="#fff"/></symbol>
+  <symbol id="i4" viewBox="0 0 48 48"><path d="M5 8h24a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H15l-7 6v-6H5a3 3 0 0 1-3-3V11a3 3 0 0 1 3-3z" fill="#fff" stroke="#2B2140" stroke-width="3" stroke-linejoin="round"/><path d="M20 30h19a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-1v5l-6-5h-12a3 3 0 0 1-3-3v-6a3 3 0 0 1 3-3z" fill="#fff" stroke="#2B2140" stroke-width="3" stroke-linejoin="round" transform="translate(4 -8)"/></symbol>
+  <symbol id="i5" viewBox="0 0 48 48"><path d="M24 44V12" stroke="#2B2140" stroke-width="3" stroke-linecap="round" fill="none"/><ellipse cx="24" cy="8" rx="4" ry="6" fill="#fff" stroke="#2B2140" stroke-width="3"/><ellipse cx="15" cy="17" rx="4" ry="7" transform="rotate(-35 15 17)" fill="#fff" stroke="#2B2140" stroke-width="3"/><ellipse cx="33" cy="17" rx="4" ry="7" transform="rotate(35 33 17)" fill="#fff" stroke="#2B2140" stroke-width="3"/><ellipse cx="14" cy="29" rx="4" ry="7" transform="rotate(-35 14 29)" fill="#fff" stroke="#2B2140" stroke-width="3"/><ellipse cx="34" cy="29" rx="4" ry="7" transform="rotate(35 34 29)" fill="#fff" stroke="#2B2140" stroke-width="3"/></symbol>
+</svg>
+
+<main class="wrap">
+  <header class="top">
+    <svg class="mascot" viewBox="0 0 80 80" role="img" aria-label="Anak tersenyum memakai syal merah putih">
+      <circle cx="40" cy="36" r="26" fill="#FFD7B0" stroke="#2B2140" stroke-width="3"/>
+      <path d="M14 34c0-16 12-24 26-24s26 8 26 24c-6-8-14-11-26-11S20 26 14 34z" fill="#2B2140"/>
+      <circle cx="31" cy="38" r="3" fill="#2B2140"/><circle cx="49" cy="38" r="3" fill="#2B2140"/>
+      <circle cx="25" cy="45" r="4" fill="#FF8F8F" opacity=".6"/><circle cx="55" cy="45" r="4" fill="#FF8F8F" opacity=".6"/>
+      <path d="M32 47q8 8 16 0" fill="none" stroke="#2B2140" stroke-width="3" stroke-linecap="round"/>
+      <path d="M18 62q22 10 44 0l2 9q-24 10-48 0z" fill="#E63B3B" stroke="#2B2140" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M40 66l12 2-1 8-11-1z" fill="#fff" stroke="#2B2140" stroke-width="3" stroke-linejoin="round"/>
+    </svg>
+    <div>
+      <h1>Aku Anak Pancasila</h1>
+      <p>Belajar berbuat baik setiap hari</p>
+    </div>
+  </header>
+  <div class="flagline" aria-hidden="true"></div>
+
+  <div class="tabs" role="tablist" aria-label="Pilih kegiatan">
+    <button class="tab" role="tab" id="tabLearn" aria-selected="true" aria-controls="panelLearn">Kenali 5 sila</button>
+    <button class="tab" role="tab" id="tabQuiz" aria-selected="false" aria-controls="panelQuiz">Pilih yang benar</button>
+    <button class="tab" role="tab" id="tabHabit" aria-selected="false" aria-controls="panelHabit">Kartu kebaikanku</button>
+  </div>
+
+  <section id="panelLearn" role="tabpanel" aria-labelledby="tabLearn" style="display:flex;flex-direction:column;gap:16px">
+    <p class="lead">Pancasila punya lima sila. Ketuk setiap kotak untuk melihat contoh perbuatan yang bisa kita lakukan.</p>
+    <div class="silas" id="silas"></div>
+  </section>
+
+  <section id="panelQuiz" role="tabpanel" aria-labelledby="tabQuiz" hidden>
+    <div class="card quiz" id="quizBox"></div>
+  </section>
+
+  <section id="panelHabit" role="tabpanel" aria-labelledby="tabHabit" hidden>
+    <div class="card" style="display:flex;flex-direction:column;gap:14px">
+      <div>
+        <p class="label">Hari ini</p>
+        <h2 style="font:700 1.6rem/1.2 var(--font-display)">Apa kebaikan yang sudah aku lakukan?</h2>
+        <p class="lead">Ketuk kotak jika kamu sudah melakukannya hari ini. Kartu ini kosong lagi besok.</p>
+      </div>
+      <div class="habits" id="habits"></div>
+      <div class="hprog"><span id="hTxt"></span><div class="bar"><i id="hBar"></i></div></div>
+      <div class="fb" id="hFb" role="status" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <p class="foot">Pendidikan Pancasila kelas 1. Tujuan belajar: murid dapat mengamalkan nilai-nilai Pancasila.</p>
+</main>
+
+<script>
+(function () {
+  function $(s) { return document.querySelector(s); }
+  function rand(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+  function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = rand(0, i); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  var SILA = [
+    { n: 1, name: 'Ketuhanan Yang Maha Esa', kid: 'Aku percaya dan taat kepada Tuhan.',
+      ex: ['Berdoa sebelum makan dan belajar.', 'Menghormati teman yang beribadah.', 'Bersyukur atas makanan dan teman-temanku.'] },
+    { n: 2, name: 'Kemanusiaan yang Adil dan Beradab', kid: 'Aku sayang dan menolong sesama.',
+      ex: ['Menolong teman yang jatuh atau sedih.', 'Berkata sopan dan tidak mengejek.', 'Mengucapkan maaf, tolong, dan terima kasih.'] },
+    { n: 3, name: 'Persatuan Indonesia', kid: 'Aku cinta Indonesia dan mau bersatu.',
+      ex: ['Bermain bersama teman dari daerah mana pun.', 'Hormat kepada bendera saat upacara.', 'Menyanyikan lagu kebangsaan dengan sungguh-sungguh.'] },
+    { n: 4, name: 'Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan dalam Permusyawaratan/Perwakilan', kid: 'Aku mau berunding dan menerima hasil bersama.',
+      ex: ['Mendengarkan pendapat teman.', 'Memilih ketua kelas dengan tertib.', 'Menerima keputusan bersama dengan senang hati.'] },
+    { n: 5, name: 'Keadilan Sosial bagi Seluruh Rakyat Indonesia', kid: 'Aku adil dan mau berbagi.',
+      ex: ['Bermain bergiliran.', 'Berbagi bekal atau alat tulis.', 'Menjaga kelas tetap bersih bersama-sama.'] }
+  ];
+
+  var Q = {
+    1: [
+      { t: 'Bekal Dani sudah dibuka dan ia siap makan.', good: 'Berdoa dulu sesuai agamanya.', bad: 'Langsung makan tanpa berdoa.', why: 'Berdoa adalah cara kita bersyukur kepada Tuhan.' },
+      { t: 'Teman Rani sedang beribadah di dekat kelas.', good: 'Bermain dengan tenang.', bad: 'Berteriak dan berlari-lari.', why: 'Kita menghormati teman yang sedang beribadah.' }
+    ],
+    2: [
+      { t: 'Budi jatuh di lapangan dan lututnya sakit.', good: 'Menolong Budi berdiri.', bad: 'Menertawakan Budi.', why: 'Kita menyayangi dan menolong sesama.' },
+      { t: 'Mainan Sari rusak dan ia menangis.', good: 'Menghibur Sari.', bad: 'Pergi meninggalkan Sari.', why: 'Teman yang sedih perlu kita hibur.' }
+    ],
+    3: [
+      { t: 'Ada murid baru yang berasal dari daerah lain.', good: 'Mengajaknya bermain bersama.', bad: 'Tidak mau bermain dengannya.', why: 'Kita berbeda-beda, tetapi tetap satu, yaitu Indonesia.' },
+      { t: 'Hari Senin kelasmu mengikuti upacara bendera.', good: 'Berdiri tegak dan hormat kepada bendera.', bad: 'Mengobrol dan bermain sendiri.', why: 'Menghormati bendera menunjukkan cinta tanah air.' }
+    ],
+    4: [
+      { t: 'Kelas akan memilih ketua kelas.', good: 'Memilih dengan tertib dan menerima hasilnya.', bad: 'Marah karena temanku tidak terpilih.', why: 'Keputusan bersama harus kita terima dengan senang hati.' },
+      { t: 'Kamu dan temanmu punya ide permainan yang berbeda.', good: 'Berunding untuk memilih bersama.', bad: 'Memaksa teman ikut ideku.', why: 'Berunding membuat keputusan menjadi adil untuk semua.' }
+    ],
+    5: [
+      { t: 'Hanya ada satu ayunan, tetapi banyak teman ingin main.', good: 'Bermain bergiliran.', bad: 'Merebut ayunan.', why: 'Bergiliran membuat semua teman mendapat bagian yang adil.' },
+      { t: 'Bekalmu banyak, tetapi temanmu tidak membawa bekal.', good: 'Membagi bekalku.', bad: 'Menyembunyikan bekalku.', why: 'Berbagi membuat semua merasa senang.' },
+      { t: 'Bungkus bekalmu sudah kosong.', good: 'Membuangnya ke tempat sampah.', bad: 'Menjatuhkannya di lantai kelas.', why: 'Menjaga kebersihan kelas adalah tugas kita bersama.' }
+    ]
+  };
+
+  var HABITS = [
+    { n: 1, t: 'Aku berdoa sebelum belajar atau makan.' },
+    { n: 2, t: 'Aku menolong atau bersikap baik kepada temanku.' },
+    { n: 3, t: 'Aku bermain bersama teman tanpa memilih-milih.' },
+    { n: 4, t: 'Aku mendengarkan pendapat temanku dan menunggu giliran bicara.' },
+    { n: 5, t: 'Aku berbagi atau menjaga kebersihan kelas.' }
+  ];
+
+  function icon(n, size) { return '<svg class="' + size + '" viewBox="0 0 48 48" aria-hidden="true"><use href="#i' + n + '"/></svg>'; }
+  function cvar(n) { return 'var(--c' + n + ')'; }
+
+  /* Kenali sila */
+  function renderSilas() {
+    var html = '';
+    SILA.forEach(function (s, i) {
+      var open = i === 0;
+      html += '<article class="sila" style="--c:' + cvar(s.n) + '">' +
+        '<button type="button" class="sila-head" id="sh' + s.n + '" aria-expanded="' + open + '" aria-controls="sb' + s.n + '">' +
+        '<span class="badge" aria-hidden="true">' + s.n + '</span>' + icon(s.n, 'sila-icon') +
+        '<span class="sila-title"><b>Sila ke-' + s.n + '</b><span>' + esc(s.kid) + '</span></span><span class="chev" aria-hidden="true">▾</span></button>' +
+        '<div class="sila-body" id="sb' + s.n + '" role="region" aria-labelledby="sh' + s.n + '"' + (open ? '' : ' hidden') + '>' +
+        '<p><b>' + esc(s.name) + '</b></p><h3>Contoh perbuatanku</h3><ul>' +
+        s.ex.map(function (e) { return '<li>' + esc(e) + '</li>'; }).join('') + '</ul>' +
+        '<button type="button" class="btn blue listen" data-say="' + s.n + '">Dengarkan</button></div></article>';
+    });
+    $('#silas').innerHTML = html;
+  }
+  $('#silas').addEventListener('click', function (e) {
+    var say = e.target.closest('[data-say]');
+    if (say) { var s = SILA[+say.getAttribute('data-say') - 1]; speak('Sila ke-' + s.n + '. ' + s.kid + ' ' + s.ex.join(' ')); return; }
+    var h = e.target.closest('.sila-head');
+    if (!h) return;
+    var body = $('#' + h.getAttribute('aria-controls'));
+    var open = h.getAttribute('aria-expanded') === 'true';
+    h.setAttribute('aria-expanded', String(!open));
+    body.hidden = open;
+  });
+
+  function speak(t) {
+    try {
+      var u = new SpeechSynthesisUtterance(t); u.lang = 'id-ID'; u.rate = 0.85;
+      window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+
+  /* Pilih yang benar */
+  var round = [], qi = 0, score = 0, answered = false, firstTry = true;
+  function newRound() {
+    round = [1, 2, 3, 4, 5].map(function (n) {
+      var list = Q[n]; var q = list[rand(0, list.length - 1)];
+      return { n: n, t: q.t, why: q.why, opts: shuffle([{ x: q.good, ok: true }, { x: q.bad, ok: false }]) };
+    });
+    qi = 0; score = 0; renderQ();
+  }
+  function dots() {
+    var h = '<div class="dots" aria-hidden="true">';
+    for (var i = 0; i < 5; i++) h += '<i class="' + (i < qi ? 'hit' : i === qi ? 'now' : '') + '"></i>';
+    return h + '</div>';
+  }
+  function renderQ() {
+    answered = false; firstTry = true;
+    var q = round[qi];
+    var html = '<p class="label">Soal ' + (qi + 1) + ' dari 5</p>' + dots() +
+      '<h2>' + esc(q.t) + '</h2><p class="ask">Apa yang sebaiknya aku lakukan?</p><div class="choices">';
+    q.opts.forEach(function (o, i) { html += '<button type="button" class="choice" data-i="' + i + '">' + esc(o.x) + '</button>'; });
+    html += '</div><div class="fb" id="qfb" role="status" aria-live="polite"></div>' +
+      '<button type="button" class="btn" id="qnext" hidden>' + (qi === 4 ? 'Lihat hasil' : 'Soal berikutnya') + '</button>';
+    var box = $('#quizBox'); box.className = 'card quiz'; box.innerHTML = html;
+  }
+  function renderResult() {
+    var stars = ''; for (var i = 0; i < 5; i++) stars += i < score ? '★' : '☆';
+    var msg = score === 5 ? 'Hebat! Kamu selalu memilih perbuatan yang baik.' : score >= 3 ? 'Bagus sekali! Ayo coba lagi supaya makin pintar.' : 'Ayo coba lagi. Pikirkan dulu perbuatan yang membuat temanmu senang.';
+    var box = $('#quizBox'); box.className = 'card quiz result';
+    box.innerHTML = '<p class="label">Hasil</p><div class="big">' + score + '</div><h2>Benar ' + score + ' dari 5 soal</h2>' +
+      '<div class="stars" aria-hidden="true">' + stars + '</div><p class="lead">' + msg + '</p><button type="button" class="btn" id="again">Main lagi</button>';
+  }
+  $('#quizBox').addEventListener('click', function (e) {
+    var c = e.target.closest('.choice');
+    if (c && !answered) {
+      var q = round[qi], o = q.opts[+c.getAttribute('data-i')], fb = $('#qfb');
+      if (o.ok) {
+        answered = true; if (firstTry) score++;
+        c.classList.add('right');
+        document.querySelectorAll('.choice').forEach(function (b) { b.disabled = true; });
+        fb.className = 'fb ok';
+        fb.innerHTML = '<span class="star" aria-hidden="true">★</span><span></span>';
+        fb.lastChild.textContent = 'Benar! ' + q.why + ' Ini mengamalkan sila ke-' + q.n + '.';
+        $('#qnext').hidden = false;
+      } else {
+        firstTry = false; c.classList.add('wrong'); c.disabled = true;
+        fb.className = 'fb hint'; fb.textContent = 'Belum tepat. Pikirkan lagi, perbuatan mana yang membuat temanmu senang?';
+      }
+      return;
+    }
+    if (e.target.id === 'qnext') { qi++; if (qi >= 5) renderResult(); else renderQ(); }
+    if (e.target.id === 'again') newRound();
+  });
+
+  /* Kartu kebaikanku */
+  var KEY = 'aku-anak-pancasila';
+  function today() { var d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+  var checks = [false, false, false, false, false];
+  try {
+    var s = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (s && s.date === today() && Array.isArray(s.items) && s.items.length === 5) checks = s.items.map(Boolean);
+  } catch (e) {}
+  function saveH() { try { localStorage.setItem(KEY, JSON.stringify({ date: today(), items: checks })); } catch (e) {} }
+  function renderHabits() {
+    var html = '';
+    HABITS.forEach(function (h, i) {
+      html += '<button type="button" class="habit" data-i="' + i + '" aria-pressed="' + checks[i] + '" style="--c:' + cvar(h.n) + '">' +
+        '<span class="tick" aria-hidden="true">✓</span><span class="txt">' + esc(h.t) + '<small>Sila ke-' + h.n + '</small></span><span class="dotc" aria-hidden="true"></span></button>';
+    });
+    $('#habits').innerHTML = html;
+    var c = checks.filter(Boolean).length;
+    $('#hTxt').textContent = c + ' dari 5 kebaikan';
+    $('#hBar').style.width = (c / 5 * 100) + '%';
+    var fb = $('#hFb');
+    if (c === 5) { fb.className = 'fb ok'; fb.innerHTML = '<span class="star" aria-hidden="true">★</span><span>Hebat! Hari ini kamu sudah berbuat baik. Kamu anak Pancasila!</span>'; }
+    else { fb.className = 'fb'; fb.textContent = ''; }
+  }
+  $('#habits').addEventListener('click', function (e) {
+    var b = e.target.closest('.habit'); if (!b) return;
+    var i = +b.getAttribute('data-i'); checks[i] = !checks[i]; saveH(); renderHabits();
+    var again = document.querySelector('.habit[data-i="' + i + '"]'); if (again) again.focus();
+  });
+
+  /* Tab */
+  var tabs = { learn: ['#tabLearn', '#panelLearn'], quiz: ['#tabQuiz', '#panelQuiz'], habit: ['#tabHabit', '#panelHabit'] };
+  function showTab(k) {
+    Object.keys(tabs).forEach(function (n) {
+      var on = n === k;
+      $(tabs[n][0]).setAttribute('aria-selected', String(on)); $(tabs[n][1]).hidden = !on;
+    });
+    if (k === 'quiz' && !round.length) newRound();
+  }
+  Object.keys(tabs).forEach(function (k) { $(tabs[k][0]).addEventListener('click', function () { showTab(k); }); });
+
+  renderSilas(); renderHabits();
+})();
+</script>
+
+</body></html>
